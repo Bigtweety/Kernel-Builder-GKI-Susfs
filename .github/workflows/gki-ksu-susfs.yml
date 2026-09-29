@@ -82,7 +82,7 @@ jobs:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
         with:
-          tool-cache: true
+          preinstalled-runtimes: true
           android: true
           dotnet: true
           haskell: false
@@ -319,7 +319,7 @@ jobs:
           if [ "$ENABLE_NOMOUNT" = "true" ]; then
             echo ">>> Fetching pinned nomount source..."
             NOMOUNT_DIR="$(pwd)/tools/user_source/fs/nomount"
-            NOMOUNT_COMMIT="db76155b6c8073dd02b8f7ecf6cdae4a1547e157"
+            NOMOUNT_COMMIT="0be4967c9917a1632c4d4188b054bb4b7f128426"
             
             # Export to GITHUB_ENV so the Artifact fetcher can use it later
             echo "NOMOUNT_COMMIT=${NOMOUNT_COMMIT}" >> $GITHUB_ENV
