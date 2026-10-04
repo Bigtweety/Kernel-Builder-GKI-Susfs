@@ -15,10 +15,10 @@ echo ">>> Searching $REPO for a Release Manager..."
 DOWNLOAD_URLS=""
 
 # ==========================================
-# 0. SukiSU-Ultra Permanent Release Bypass
+# 0. SukiSU-Ultra Stable Bypass
 # ==========================================
-if [[ "${VARIANT}" == *"SukiSU"* || "${REPO}" == *"SukiSU"* ]]; then
-    echo ">>> SukiSU-Ultra detected. Bypassing artifact hunt..."
+if [[ "${ROOT_MANAGER}" == "SukiSU-Ultra" && "${USE_DYNAMIC_TRANSPLANT}" != "true" ]]; then
+    echo ">>> SukiSU-Ultra Stable Channel detected. Bypassing artifact hunt..."
     echo ">>> Fetching permanent v4.2.0 Release APK..."
     
     mkdir -p manager_apk
@@ -30,7 +30,7 @@ if [[ "${VARIANT}" == *"SukiSU"* || "${REPO}" == *"SukiSU"* ]]; then
     ls -1 manager_apk/
     exit 0
 fi
-
+ 
 # ==========================================
 # 1. EXACT HASH MATCH
 # ==========================================

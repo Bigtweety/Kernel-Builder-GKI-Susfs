@@ -345,7 +345,7 @@ jobs:
         shell: bash
 
       - name: Apply User Patches
-        if: inputs.enable_nomount == true || inputs.enable_net_opts == true
+        if: inputs.enable_net_opts == true
         run: |
           PATCH_DIR="$(pwd)/tools/user_patches"
           
