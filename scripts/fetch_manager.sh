@@ -15,6 +15,23 @@ echo ">>> Searching $REPO for a Release Manager..."
 DOWNLOAD_URLS=""
 
 # ==========================================
+# 0. SukiSU-Ultra Permanent Release Bypass
+# ==========================================
+if [[ "${VARIANT}" == *"SukiSU"* || "${REPO}" == *"SukiSU"* ]]; then
+    echo ">>> SukiSU-Ultra detected. Bypassing artifact hunt..."
+    echo ">>> Fetching permanent v4.2.0 Release APK..."
+    
+    mkdir -p manager_apk
+    curl -s -L \
+      -o "manager_apk/SukiSU_v4.2.0_40900-release.apk" \
+      "https://github.com/SukiSU-Ultra/SukiSU-Ultra/releases/download/v4.2.0/SukiSU_v4.2.0_40900-release.apk"
+    
+    echo ">>> Manager successfully staged for final upload!"
+    ls -1 manager_apk/
+    exit 0
+fi
+
+# ==========================================
 # 1. EXACT HASH MATCH
 # ==========================================
 echo ">>> Checking for exact upstream hash: ${UPSTREAM_HASH}"
