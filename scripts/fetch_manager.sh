@@ -53,7 +53,7 @@ fi
 # ==========================================
 echo ">>> Checking for exact upstream hash: ${UPSTREAM_HASH}"
 EXACT_RUNS=$(curl -s -H "Authorization: token $GH_TOKEN" \
-  "https://api.github.com/repos/$REPO/actions/runs?head_sha=${UPSTREAM_HASH}&status=success&per_page=50")
+  "https://api.github.com/repos/$REPO/actions/workflows/$WORKFLOW_FILE/runs?head_sha=${UPSTREAM_HASH}&status=success&per_page=50")
 
 RUN_IDS=$(echo "$EXACT_RUNS" | jq -r '.workflow_runs[]?.id // empty')
 
