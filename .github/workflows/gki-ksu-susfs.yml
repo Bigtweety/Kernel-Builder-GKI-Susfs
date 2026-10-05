@@ -319,7 +319,7 @@ jobs:
           if [ "$ENABLE_NOMOUNT" = "true" ]; then
             echo ">>> Fetching pinned nomount source..."
             NOMOUNT_DIR="$(pwd)/tools/user_source/fs/nomount"
-            NOMOUNT_COMMIT="0be4967c9917a1632c4d4188b054bb4b7f128426"
+            NOMOUNT_COMMIT="a159c0c225e67f180b7fb55ad78a77b0f98beb5b"
             
             # Export to GITHUB_ENV so the Artifact fetcher can use it later
             echo "NOMOUNT_COMMIT=${NOMOUNT_COMMIT}" >> $GITHUB_ENV
