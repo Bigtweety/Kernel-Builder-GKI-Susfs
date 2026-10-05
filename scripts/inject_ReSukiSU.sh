@@ -5,7 +5,7 @@ echo ">>> Executing Integration Module for ReSukiSU..."
 
 if [ "${USE_DYNAMIC_TRANSPLANT}" == "true" ]; then
     echo ">>> 1. Cloning pristine official ReSukiSU upstream..."
-    git clone "https://github.com/${UPSTREAM_REPO}.git" "${MANAGER_DIR}"
+    git clone "https://github.com/shoey63/ReSukiSU.git" "${MANAGER_DIR}"
     
     ln -sfn "../${MANAGER_DIR}" "common/${MANAGER_DIR}"
     cd common

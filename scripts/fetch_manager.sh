@@ -15,8 +15,10 @@ echo ">>> Searching $REPO for a Release Manager..."
 DOWNLOAD_URLS=""
 
 # ==========================================
-# 0. SukiSU-Ultra Stable Bypass
+# 0. Permanent Release Bypasses
 # ==========================================
+
+# SukiSU-Ultra (Stable Channel Only)
 if [[ "${ROOT_MANAGER}" == "SukiSU-Ultra" && "${USE_DYNAMIC_TRANSPLANT}" != "true" ]]; then
     echo ">>> SukiSU-Ultra Stable Channel detected. Bypassing artifact hunt..."
     echo ">>> Fetching permanent v4.2.0 Release APK..."
@@ -30,7 +32,22 @@ if [[ "${ROOT_MANAGER}" == "SukiSU-Ultra" && "${USE_DYNAMIC_TRANSPLANT}" != "tru
     ls -1 manager_apk/
     exit 0
 fi
- 
+
+# ReSukiSU (Both Channels - Upstream Transition Bypass)
+if [[ "${ROOT_MANAGER}" == "ReSukiSU" ]]; then
+    echo ">>> ReSukiSU upstream in transition. Bypassing volatile Actions artifacts..."
+    echo ">>> Fetching v4.2.0-rc3 Release APK..."
+    
+    mkdir -p manager_apk
+    curl -s -L \
+      -o "manager_apk/ReSukiSU_v4.2.0-rc3_35171-arm64-v8a-release.apk" \
+      "https://github.com/Baka-SU/BakaSU/releases/download/v4.2.0-rc3/ReSukiSU_v4.2.0-rc3_35171-arm64-v8a-release.apk"
+    
+    echo ">>> Manager successfully staged for final upload!"
+    ls -1 manager_apk/
+    exit 0
+fi
+
 # ==========================================
 # 1. EXACT HASH MATCH
 # ==========================================
