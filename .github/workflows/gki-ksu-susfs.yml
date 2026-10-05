@@ -291,7 +291,7 @@ jobs:
           bash ./scripts/inject_ksu_variant.sh "${{ inputs.root_manager }}"
 
       - name: Integrate SUSFS common-side
-        if: inputs.root_manager != 'Stock' && inputs.enable_ksu_susfs == true
+        if: inputs.root_manager != 'Stock' && !(inputs.root_manager == 'SukiSU-Ultra' && inputs.build_channel == 'dynamic') && inputs.enable_ksu_susfs == true
         env:
           SUSFS_NEXT_URL: ${{ env.SUSFS_REPO_URL }}
           SUSFS_NEXT_REF: ${{ env.SUSFS_BRANCH }}
@@ -299,7 +299,7 @@ jobs:
           bash ./scripts/integrate_susfs.sh
 
       - name: Fix SUSFS Patch Rejections
-        if: inputs.root_manager != 'Stock' && inputs.enable_ksu_susfs == true
+        if: inputs.root_manager != 'Stock' && !(inputs.root_manager == 'SukiSU-Ultra' && inputs.build_channel == 'dynamic') && inputs.enable_ksu_susfs == true
         run: |
           bash ./scripts/fix_susfs_rejections.sh
 
@@ -504,11 +504,21 @@ jobs:
           RUN_ID=$(echo "$RUNS_JSON" | jq -r '.workflow_runs[0].id // empty')
           
           if [ -z "$RUN_ID" ]; then
-            echo "[-] Error: Could not find a successful Action run for commit $NOMOUNT_COMMIT."
-            exit 1
+            echo "[-] Exact commit match not found or failed upstream. Falling back to latest successful run..."
+            # Fallback: Query the most recent successful run globally across the repo
+            FALLBACK_JSON=$(curl -s -H "Authorization: token $GH_TOKEN" \
+              "https://api.github.com/repos/maxsteeel/nomount/actions/runs?status=success&per_page=1")
+            
+            RUN_ID=$(echo "$FALLBACK_JSON" | jq -r '.workflow_runs[0].id // empty')
+            
+            if [ -z "$RUN_ID" ]; then
+               echo "[-] Error: Could not find ANY successful Action runs in the repository."
+               exit 1
+            fi
+            echo "  -> Found Fallback Run ID: $RUN_ID"
+          else
+            echo "  -> Found Exact Match Run ID: $RUN_ID"
           fi
-          
-          echo "  -> Found successful Run ID: $RUN_ID"
           
           # 2. Locate the specific NoMount artifact download URL
           ARTIFACTS_JSON=$(curl -s -H "Authorization: token $GH_TOKEN" \

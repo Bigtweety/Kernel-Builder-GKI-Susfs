@@ -53,7 +53,7 @@ fi
 # ==========================================
 echo ">>> Checking for exact upstream hash: ${UPSTREAM_HASH}"
 EXACT_RUNS=$(curl -s -H "Authorization: token $GH_TOKEN" \
-  "https://api.github.com/repos/$REPO/actions/workflows/$WORKFLOW_FILE/runs?head_sha=${UPSTREAM_HASH}&status=success&per_page=50")
+  "https://api.github.com/repos/$REPO/actions/workflows/$WORKFLOW_FILE/runs?head_sha=${UPSTREAM_HASH}&status=success&per_page=100")
 
 RUN_IDS=$(echo "$EXACT_RUNS" | jq -r '.workflow_runs[]?.id // empty')
 
@@ -84,7 +84,7 @@ if [ -z "$DOWNLOAD_URLS" ]; then
     
     # Target the specific workflow file defined for the variant
     RECENT_RUNS=$(curl -s -H "Authorization: token ${GH_TOKEN}" \
-      "https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW_FILE}/runs?branch=${TARGET_BRANCH}&status=success&per_page=10")
+      "https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW_FILE}/runs?branch=${TARGET_BRANCH}&status=success&per_page=100")
 
     RECENT_RUN_IDS=$(echo "$RECENT_RUNS" | jq -r '.workflow_runs[]?.id // empty')
     

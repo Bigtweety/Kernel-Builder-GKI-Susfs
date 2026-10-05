@@ -23,7 +23,7 @@ The result? You get one single, tailor-made kernel artifact and its exact matchi
 ## ⚠️ Upstream Architectural Shifts (Important)
 The kernel root ecosystem has recently fractured, requiring distinct pipeline handling for certain managers:
 * **SukiSU-Ultra:** Upstream has migrated entirely to a `pt_regs` raw syscall hooking architecture, abandoning the Virtual File System (VFS). Because SuSFS strictly requires VFS to function, the `dynamic` channel for SukiSU-Ultra bypasses SuSFS entirely and builds vanilla `pt_regs` root which can be used with the `nomount` module for extra stealth. The `stable` channel remains locked to a legacy, VFS-compatible `v4.2.0` release to maintain SuSFS support.
-* **ReSukiSU (BakaSU):** To maintain the classic VFS/SuSFS architecture and distance itself from SukiSU-Ultra's pivot, ReSukiSU has officially rebranded to **BakaSU**. During this volatile repository transition, our CI strictly pins ReSukiSU/BakaSU builds to the stable `v4.2.0-rc3` commit and intercepts the broken upstream artifact hunt to serve the exact matching Release APK, ensuring bulletproof compilation.
+* **ReSukiSU (BakaSU):** To maintain the classic VFS/SuSFS architecture and distance itself from SukiSU-Ultra's pivot, ReSukiSU has officially rebranded to **BakaSU**. During this volatile repository transition, the CI strictly pins ReSukiSU/BakaSU builds to the stable `v4.2.0-rc3` commit and intercepts the broken upstream artifact hunt to serve the exact matching Release APK, ensuring bulletproof compilation.
 
 ## ⚙️ Features
 * **Multiple Root Managers:** Native integration support for `KernelSU`, `KernelSU-Next`, `SukiSU-Ultra`, and `ReSukiSU` (BakaSU).
