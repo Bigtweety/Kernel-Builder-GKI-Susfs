@@ -4,7 +4,7 @@
 echo ">>> Executing Integration Module for SukiSU-Ultra..."
 
 if [ "${USE_DYNAMIC_TRANSPLANT}" == "true" ]; then
-    echo ">>> Dynamic Channel: Cloning pristine ${UPSTREAM_REPO} upstream (Vanilla Root + NoMount)..."
+    echo ">>> 1. Cloning pristine official SukiSU-Ultra upstream..."
     git clone "https://github.com/${UPSTREAM_REPO}.git" "${MANAGER_DIR}"
     
     ln -sfn "../${MANAGER_DIR}" "common/${MANAGER_DIR}"
@@ -17,6 +17,34 @@ if [ "${USE_DYNAMIC_TRANSPLANT}" == "true" ]; then
     CALCULATED_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
     CALCULATED_COUNT=$(git rev-list --count "${UPSTREAM_HASH}")
     UPSTREAM_BRANCH="${TARGET_BRANCH}"
+
+    echo ">>> 2. Fetching 'builtin' branch for SuSFS code transplant..."
+    git fetch origin builtin:builtin
+    git checkout builtin
+
+    rm -rf uapi
+    mv kernel/include/uapi uapi 2>/dev/null || true
+    cd kernel/include
+    ln -s ../../uapi uapi
+    cd ../..
+    mv kernel/Makefile kernel/Kbuild 2>/dev/null || true
+
+    git add uapi kernel/
+    git config --global user.email "runner@github.actions"
+    git config --global user.name "GitHub Actions Canary"
+    git commit -m "chore: CI structural fixes (symlinks and Kbuild)"
+
+    echo ">>> 3. Generating filtered SuSFS patch..."
+    git checkout "${TARGET_BRANCH}"
+    git diff --diff-filter=AM "${TARGET_BRANCH}..builtin" -- kernel/ uapi/ \
+      ':!kernel/.clangd' \
+      ':!kernel/.clang-format' \
+      ':!kernel/.gitignore' \
+      ':!.gitignore' > susfs_port_clean.patch
+
+    echo ">>> 4. Applying surgical SuSFS port patch to main..."
+    git apply susfs_port_clean.patch
+    rm susfs_port_clean.patch
     cd ..
 else
     echo ">>> Safe fallback channel detected. Cloning custom pipeline branch..."
