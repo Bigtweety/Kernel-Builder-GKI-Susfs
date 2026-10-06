@@ -15,18 +15,13 @@ The result? You get one single, tailor-made kernel artifact and its exact matchi
 
 ### ✨ Advantages
 * **No Waiting for Updates:** You don't have to wait for a maintainer to trigger a batch build. If Google drops a new GKI update, or KernelSU merges a new commit, you can build it yourself immediately.
-* **Bleeding Edge by Default:** The `dynamic` build channel pulls the latest upstream commits for the Linux kernel and your chosen root manager every single time you run it. 
+* **Bleeding Edge Option:** The `dynamic` build channel pulls the latest upstream commits for the Linux kernel and your chosen root manager every single time you run it. 
 * **Precision Output:** Instead of sifting through hundreds of zip files to find your device's specific combination, the CI builds exactly what you ask for and packages it cleanly.
 * **Guaranteed Version Matching:** The pipeline automatically fetches the exact Manager APK that matches the root environment source code used during compilation. No more signature mismatches or incompatible userspace apps.
 * **Safe Fallbacks:** If the bleeding-edge upstream commits break compilation, you can instantly toggle the CI to the `stable` channel to build from verified, safe forks.
 
-## ⚠️ Upstream Architectural Shifts (Important)
-The kernel root ecosystem has recently fractured, requiring distinct pipeline handling for certain managers:
-* **SukiSU-Ultra:** Upstream has migrated entirely to a `pt_regs` raw syscall hooking architecture, abandoning the Virtual File System (VFS). Because SuSFS strictly requires VFS to function, the `dynamic` channel for SukiSU-Ultra bypasses SuSFS entirely and builds vanilla `pt_regs` root which can be used with the `nomount` module for extra stealth. The `stable` channel remains locked to a legacy, VFS-compatible `v4.2.0` release to maintain SuSFS support.
-* **ReSukiSU (BakaSU):** To maintain the classic VFS/SuSFS architecture and distance itself from SukiSU-Ultra's pivot, ReSukiSU has officially rebranded to **BakaSU**. During this volatile repository transition, the CI strictly pins ReSukiSU/BakaSU builds to the stable `v4.2.0-rc3` commit and intercepts the broken upstream artifact hunt to serve the exact matching Release APK, ensuring bulletproof compilation.
-
 ## ⚙️ Features
-* **Multiple Root Managers:** Native integration support for `KernelSU`, `KernelSU-Next`, `SukiSU-Ultra`, and `ReSukiSU` (BakaSU).
+* **Multiple Root Managers:** Native integration support for `KernelSU`, `KernelSU-Next`, `SukiSU-Ultra`, `BakaSU`, and `ReSukiSU` (retained as a legacy fallback branch in case of BakaSU instability).
 * **Smart Stock Isolation:** Select `Stock` to guarantee a pristine Google source tree. Combine `Stock` with custom Kconfigs to build an "Enhanced Stock" kernel—perfect for APatch or Magisk users who need specific kernel features baked into the core without conflicting root source code pollution.
 * **SuSFS Integration:** Automated patching and macro injection for SuSFS to enable advanced path hiding, kstat spoofing, and mount masking.
 * **NoMount VFS:** Native integration of maxsteeel's NoMount for advanced kernel-level path redirection. The pipeline dynamically hooks the independent VFS tree directory and outputs a ready-to-flash KernelSU metamodule alongside the kernel.
@@ -62,8 +57,8 @@ In your forked repository, navigate to the **Actions** tab. Click **"I understan
 | **Build Channel** | Choose `dynamic` (latest upstream commits) or `stable` (fallback to verified forks if dynamic fails). |
 | **Build Name** | A custom name for your output artifact (e.g., `Pixel_10_Pro_Testing`). |
 | **Kernel Version** | The exact GKI target version you wish to build (e.g., `6.12.11`). |
-| **Root Environment** | Select your preferred root manager from the dropdown list (`KernelSU`, `KernelSU-Next`, `SukiSU-Ultra`, `ReSukiSU`, or `Stock`). |
-| **Integrate Root Manager and SUSFS?** | Check to inject Kernel root and SUSFS. *(Ignored if `Stock` is selected. Automatically omits SuSFS during SukiSU-Ultra dynamic runs).* |
+| **Root Environment** | Select your preferred root manager from the dropdown list (`KernelSU`, `KernelSU-Next`, `SukiSU-Ultra`, `BakaSU`, `ReSukiSU`, or `Stock`). |
+| **Integrate Root Manager and SUSFS?** | Check to inject Kernel root and SUSFS. *(Ignored if `Stock` is selected).* |
 | **Inject NoMount VFS?** | Check to dynamically wire NoMount source directories into the VFS Kbuild tree and download the NoMount metamodule. |
 | **Enable Performance Networking?** | Check to apply custom network Kconfigs and version-aware `.patch` files to the kernel source tree. |
 | **OTA URL (Optional)** | Leave blank to output an `AnyKernel3` zip. Provide a direct link to a full OTA zip to output a pre-patched `boot.img`. |
