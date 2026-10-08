@@ -20,6 +20,7 @@ on:
         description: "Kernel Version"
         required: true
         type: string
+        default: 6.1-android16
 
       root_manager:
         description: "Root Environment"
@@ -32,6 +33,7 @@ on:
           - ReSukiSU
           - KernelSU
           - Stock
+        default: KernelSU-Next
 
       enable_ksu_susfs:
         description: "Integrate Root Manager and SUSFS?"
@@ -49,7 +51,7 @@ on:
         description: "Inject Network Optimizations (BBR, CAKE, FastOpen, ECN)"
         required: false
         type: boolean
-        default: false
+        default: true
         
       ota_url:
         description: "Full OTA ZIP URL (blank produces AK3 zip)"
