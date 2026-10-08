@@ -10,11 +10,13 @@ on:
         options:
           - stable
           - dynamic
+        default: dynamic
 
       build_name:
         description: "Build Name"
         required: true
         type: string
+        default: OP12_SUSFS2.3_KSUN3.4
 
       target_version:
         description: "Kernel Version"
