@@ -22,7 +22,7 @@ on:
         description: "Kernel Version"
         required: true
         type: string
-        default: 6.1
+        default: android14-6.1-dev
 
       root_manager:
         description: "Root Environment"
@@ -243,7 +243,7 @@ jobs:
         run: |
           set -euo pipefail
           rm -rf kernel_workspace && mkdir -p kernel_workspace && cd kernel_workspace
-          repo init -u "$MANIFEST_URL" -b common-android14-6.1.141 --depth=1
+          repo init -u "$MANIFEST_URL" -b "$MANIFEST_BRANCH" --depth=1
           
           MAX_RETRIES=3
           for i in $(seq 1 $MAX_RETRIES); do
