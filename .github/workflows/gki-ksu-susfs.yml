@@ -22,7 +22,7 @@ on:
         description: "Kernel Version"
         required: true
         type: string
-        default: android14-6.1-dev
+        default: android14-6.1-2025-09
 
       root_manager:
         description: "Root Environment"
